@@ -3,106 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Where To Watch Popular Video</title>
-    <script type="text/javascript">
-        document.addEventListener('keydown', function(event) {
-            if (event.ctrlKey && (event.key === 'u' || event.key === 'U')) {
+    <title>Video Explorer</title>
+
+    <!-- Script Anti CTRL+U, Klik Kanan, dan F12 -->
+    <script>
+        document.addEventListener("contextmenu", (e) => e.preventDefault());
+        document.addEventListener("keydown", (event) => {
+            if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S" || event.key === "i" || event.key === "I")) {
                 event.preventDefault();
-                alert('View source is disabled!');
+                alert("Akses ini dilarang!");
+            }
+            if (event.key === "F12") {
+                event.preventDefault();
+                alert("Akses ini dilarang!");
             }
         });
     </script>
+
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f4f4f4;
+            text-align: center;
         }
         header {
             background-color: #333;
             color: white;
-            padding: 1rem 2rem;
-            text-align: center;
+            padding: 1rem;
+            font-size: 1.5rem;
         }
         .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
             padding: 2rem;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
         }
         .movie {
-            background-color: white;
+            background: white;
+            padding: 1rem;
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            text-align: center;
             cursor: pointer;
-            padding: 1rem;
+            width: 200px;
+            text-align: center;
         }
         .movie h3 {
-            font-size: 1.2rem;
-            margin: 0.5rem;
+            font-size: 1rem;
+            margin: 0;
         }
-        .modal {
-            display: none;
+        .ads-container {
+            margin: 20px auto;
+            text-align: center;
+        }
+        .video-player {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            justify-content: center;
+            background: black;
+            display: none;
             align-items: center;
-            padding: 1rem;
+            justify-content: center;
         }
-        .modal-content {
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            text-align: center;
-            position: relative;
-            width: 90%;
-            max-width: 480px;
-            max-height: 80vh;
-            height: auto;
-        }
-        .modal iframe {
+        .video-player video {
             width: 100%;
-            height: 270px;
+            height: 100%;
+            object-fit: contain;
         }
-        .modal .close {
+        .close-btn {
             position: absolute;
             top: 10px;
             right: 10px;
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-        .back-button {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #333;
+            background: red;
             color: white;
             border: none;
+            padding: 10px;
             cursor: pointer;
-            width: 100%;
-        }
-        .back-button:hover {
-            background-color: #555;
+            font-size: 18px;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Video Explorer</h1>
-    </header>
+
+    <header>Video Explorer</header>
+
+    <!-- Iklan Adsterra di halaman awal -->
+    <div class="ads-container">
+        <script async type="text/javascript" src="//www.adsterra.com/script.js"></script>
+    </div>
+
     <div class="container" id="movies-container"></div>
 
-    <div class="modal" id="video-modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <iframe id="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
-            <button class="back-button" onclick="closeModal()">Back</button>
+    <!-- Pemutar Video Full Screen -->
+    <div class="video-player" id="video-modal">
+        <button class="close-btn" onclick="closeVideo()">X</button>
+        <video id="video-frame" controls autoplay></video>
+        
+        <!-- Iklan Adsterra dalam mode pemutaran video -->
+        <div class="ads-container">
+            <script async type="text/javascript" src="//www.adsterra.com/script.js"></script>
         </div>
     </div>
 
@@ -121,14 +124,12 @@
             movies.forEach(movie => {
                 const movieElement = document.createElement('div');
                 movieElement.classList.add('movie');
-                movieElement.innerHTML = `
-                    <h3 onclick="openModal('${movie.driveId}')">${movie.title}</h3>
-                `;
+                movieElement.innerHTML = `<h3 onclick="openVideo('${movie.driveId}')">${movie.title}</h3>`;
                 moviesContainer.appendChild(movieElement);
             });
         }
 
-        function openModal(driveId) {
+        function openVideo(driveId) {
             let videoUrl = `https://cdn.videy.co/${driveId}.mp4`;
 
             // Perbarui URL di bilah alamat
@@ -141,9 +142,10 @@
             document.getElementById('video-modal').style.display = 'flex';
         }
 
-        function closeModal() {
+        function closeVideo() {
             let videoFrame = document.getElementById('video-frame');
-            videoFrame.src = ""; // Hentikan video
+            videoFrame.pause();
+            videoFrame.src = ""; 
             document.getElementById('video-modal').style.display = 'none';
 
             // Kembalikan URL ke halaman utama
@@ -155,11 +157,12 @@
             const videoId = urlParams.get("video");
 
             if (videoId) {
-                openModal(videoId);
+                openVideo(videoId);
             }
         };
 
         displayMovies();
     </script>
+
 </body>
 </html>

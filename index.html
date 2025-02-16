@@ -3,62 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player</title>
+    <title>Where To Watch Popular Video</title>
     <style>
         body {
+            font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: black;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+        .container {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .movie {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            cursor: pointer;
+            padding: 1rem;
+        }
+        .movie h3 {
+            font-size: 1.2rem;
+            margin: 0.5rem;
         }
         .video-container {
+            display: none;
+            padding: 2rem;
+            text-align: center;
             position: relative;
-            width: 100%;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
         }
         .video-frame {
-            width: 100%;
-            height: 100vh;
-            object-fit: cover;
-            transform: rotateX(20deg);
+            width: 60%; /* Mengurangi ukuran lebar video */
+            height: 50vh; /* Mengurangi tinggi video */
+            max-width: 600px; /* Membatasi ukuran maksimum */
+            border-radius: 10px; /* Memberikan efek sudut melengkung */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Menambahkan bayangan */
+        }
+        .ad-container {
+            text-align: center;
+            margin-top: 1rem;
         }
         .back-button {
-            position: absolute;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 10px 20px;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
             border: none;
+            background-color: #333;
+            color: white;
             cursor: pointer;
-            font-size: 16px;
             border-radius: 5px;
         }
     </style>
 </head>
 <body>
-    <div class="video-container">
-        <video id="video-frame" class="video-frame" autoplay controls>
-            <source src="https://cdn.videy.co/cenAcoL11.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <button class="back-button" onclick="closeVideo()">Kembali</button>
+    <header>
+        <h1>Video Explorer</h1>
+    </header>
+    <div class="container" id="movies-container"></div>
+    
+    <div class="video-container" id="video-container">
+        <iframe id="video-frame" class="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
+        <div class="ad-container"></div>
+        <button class="back-button" onclick="closeVideo()">Back</button>
     </div>
 
     <script>
-        function closeVideo() {
-            window.history.back();
+        const movies = [
+            { title: "Movie 1", driveId: "cenAcoL11" },
+            { title: "Movie 2", driveId: "jhB92t7f1" },
+            { title: "Movie 3", driveId: "xyz123abc" },
+            { title: "Movie 4", driveId: "lmn456def" }
+        ];
+
+        function displayMovies() {
+            const moviesContainer = document.getElementById('movies-container');
+            moviesContainer.innerHTML = '';
+
+            movies.forEach(movie => {
+                const movieElement = document.createElement('div');
+                movieElement.classList.add('movie');
+                movieElement.innerHTML = `<h3 onclick="openVideo('${movie.driveId}')">${movie.title}</h3>`;
+                moviesContainer.appendChild(movieElement);
+            });
         }
+
+        function openVideo(driveId) {
+            let videoUrl = `https://cdn.videy.co/${driveId}.mp4`;
+            history.pushState({ video: driveId }, "", `?video=${driveId}`);
+            
+            document.getElementById('movies-container').style.display = 'none';
+            document.getElementById('video-container').style.display = 'block';
+            
+            let videoFrame = document.getElementById('video-frame');
+            videoFrame.src = videoUrl;
+        }
+
+        function closeVideo() {
+            let videoFrame = document.getElementById('video-frame');
+            videoFrame.src = "";
+            document.getElementById('movies-container').style.display = 'grid';
+            document.getElementById('video-container').style.display = 'none';
+            history.pushState({}, "", window.location.pathname);
+        }
+
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoId = urlParams.get("video");
+            if (videoId) {
+                openVideo(videoId);
+            }
+        };
+
+        displayMovies();
     </script>
 </body>
 </html>

@@ -3,72 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player</title>
+    <title>Where To Watch Popular Video</title>
+    <script type="text/javascript">
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && (event.key === 'u' || event.key === 'U')) {
+                event.preventDefault();
+                alert('View source is disabled!');
+            }
+        });
+    </script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #f4f4f4;
         }
-        .video-container {
-            margin-top: 20px;
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
         }
-        iframe {
+        .container {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .movie {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+            padding: 1rem;
+        }
+        .movie h3 {
+            font-size: 1.2rem;
+            margin: 0.5rem;
+        }
+        .video-container {
+            display: none;
+            padding: 2rem;
+            text-align: center;
+        }
+        .video-frame {
             width: 100%;
             max-width: 720px;
             height: 405px;
         }
-        .back-button {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: none;
-            cursor: pointer;
-        }
-        .back-button:hover {
-            background-color: #555;
-        }
     </style>
 </head>
 <body>
-    <h1>Video Player</h1>
+    <header>
+        <h1>Video Explorer</h1>
+    </header>
     
     <div align="center">
         <script async type="text/javascript" src="//pl16512345.highcpmrevenuegate.com/a1b2c3d4e5f6g7h8i9j0.js"></script>
     </div>
 
+    <div class="container" id="movies-container"></div>
+    
     <div class="video-container" id="video-container">
-        <iframe id="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
-        <br>
-        <button class="back-button" onclick="goBack()">Back</button>
+        <div align="center">
+            <script async type="text/javascript" src="//pl16512345.highcpmrevenuegate.com/a1b2c3d4e5f6g7h8i9j0.js"></script>
+        </div>
+        <iframe id="video-frame" class="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
+        <div align="center">
+            <script async type="text/javascript" src="//pl16512345.highcpmrevenuegate.com/a1b2c3d4e5f6g7h8i9j0.js"></script>
+        </div>
+        <button class="back-button" onclick="closeVideo()">Back</button>
     </div>
 
     <script>
-        function getVideoId() {
-            let pathSegments = window.location.pathname.split('/').filter(segment => segment);
-            if (pathSegments.length === 2 && pathSegments[0] === "play") {
-                return pathSegments[1]; // Ambil ID video
-            }
-            return null;
+        const movies = [
+            { title: "Movie 1", driveId: "cenAcoL11" },
+            { title: "Movie 2", driveId: "jhB92t7f1" },
+            { title: "Movie 3", driveId: "xyz123abc" },
+            { title: "Movie 4", driveId: "lmn456def" }
+        ];
+
+        function displayMovies() {
+            const moviesContainer = document.getElementById('movies-container');
+            moviesContainer.innerHTML = '';
+
+            movies.forEach(movie => {
+                const movieElement = document.createElement('div');
+                movieElement.classList.add('movie');
+                movieElement.innerHTML = `
+                    <h3 onclick="openVideo('${movie.driveId}')">${movie.title}</h3>
+                `;
+                moviesContainer.appendChild(movieElement);
+            });
         }
 
-        function loadVideo() {
-            const videoId = getVideoId();
+        function openVideo(driveId) {
+            let videoUrl = `https://cdn.videy.co/${driveId}.mp4`;
+            history.pushState({ video: driveId }, "", `?video=${driveId}`);
+            
+            document.getElementById('movies-container').style.display = 'none';
+            document.getElementById('video-container').style.display = 'block';
+            
+            let videoFrame = document.getElementById('video-frame');
+            videoFrame.src = videoUrl;
+            videoFrame.setAttribute("allow", "autoplay");
+        }
+
+        function closeVideo() {
+            let videoFrame = document.getElementById('video-frame');
+            videoFrame.src = "";
+            document.getElementById('movies-container').style.display = 'grid';
+            document.getElementById('video-container').style.display = 'none';
+            history.pushState({}, "", window.location.pathname);
+        }
+
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoId = urlParams.get("video");
             if (videoId) {
-                let videoUrl = `https://cdn.videy.co/${videoId}.mp4`;
-                document.getElementById("video-frame").src = videoUrl;
-            } else {
-                document.body.innerHTML = "<h1>Video Not Found</h1>";
+                openVideo(videoId);
             }
-        }
+        };
 
-        function goBack() {
-            window.location.href = "/cenAcoL11";
-        }
-
-        window.onload = loadVideo;
+        displayMovies();
     </script>
 </body>
 </html>

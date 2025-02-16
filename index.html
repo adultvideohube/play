@@ -48,17 +48,13 @@
             display: none;
             text-align: center;
             padding: 2rem;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
             background-color: black;
             z-index: 1000;
         }
         .video-frame {
-            width: 100vw;
-            height: 100vh;
+            width: 100%;
+            max-width: 720px;
+            height: 405px;
         }
         .ad-container {
             margin-top: 10px;
@@ -122,16 +118,6 @@
             let videoFrame = document.getElementById('video-frame');
             videoFrame.src = videoUrl;
             videoFrame.setAttribute("allow", "autoplay");
-            
-            if (videoFrame.requestFullscreen) {
-                videoFrame.requestFullscreen();
-            } else if (videoFrame.mozRequestFullScreen) {
-                videoFrame.mozRequestFullScreen();
-            } else if (videoFrame.webkitRequestFullscreen) {
-                videoFrame.webkitRequestFullscreen();
-            } else if (videoFrame.msRequestFullscreen) {
-                videoFrame.msRequestFullscreen();
-            }
         }
 
         function closeVideo() {
@@ -140,16 +126,6 @@
             document.getElementById('movies-container').style.display = 'grid';
             document.getElementById('video-container').style.display = 'none';
             history.pushState({}, "", window.location.pathname);
-            
-            if (document.fullscreenElement) {
-                document.exitFullscreen();
-            } else if (document.mozFullScreenElement) {
-                document.mozCancelFullScreen();
-            } else if (document.webkitFullscreenElement) {
-                document.webkitExitFullscreen();
-            } else if (document.msFullscreenElement) {
-                document.msExitFullscreen();
-            }
         }
 
         window.onload = function () {

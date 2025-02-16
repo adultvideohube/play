@@ -44,78 +44,38 @@
             font-size: 1.2rem;
             margin: 0.5rem;
         }
-        .modal {
+        .video-container {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            justify-content: center;
-            align-items: center;
-            padding: 1rem;
-        }
-        .modal-content {
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 2rem;
             text-align: center;
-            position: relative;
-            width: 90%;
-            max-width: 480px;
-            max-height: 80vh;
-            height: auto;
         }
-        .modal iframe {
+        .video-frame {
             width: 100%;
-            height: 270px;
-        }
-        .modal .close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            cursor: pointer;
-            font-size: 1.5rem;
-        }
-        .back-button {
-            margin-top: 10px;
-            padding: 10px;
-            background-color: #333;
-            color: white;
-            border: none;
-            cursor: pointer;
-            width: 100%;
-        }
-        .back-button:hover {
-            background-color: #555;
+            max-width: 720px;
+            height: 405px;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>viral Video Explorer</h1>
+        <h1>ehem Video Explorer</h1>
     </header>
     
-    <!-- Adsterra Banner -->
     <div align="center">
         <script async type="text/javascript" src="//pl16512345.highcpmrevenuegate.com/a1b2c3d4e5f6g7h8i9j0.js"></script>
     </div>
 
     <div class="container" id="movies-container"></div>
-
-    <div class="modal" id="video-modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            
-            <!-- Adsterra Banner in Modal -->
-            <div align="center">
-                <script async type="text/javascript" src="//pl16512345.highcpmrevenuegate.com/a1b2c3d4e5f6g7h8i9j0.js"></script>
-            </div>
-            
-            <iframe id="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
-            <button class="back-button" onclick="closeModal()">Back</button>
+    
+    <div class="video-container" id="video-container">
+        <div align="center">
+            <script async type="text/javascript" src="//pl16512345.highcpmrevenuegate.com/a1b2c3d4e5f6g7h8i9j0.js"></script>
         </div>
+        <iframe id="video-frame" class="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
+        <div align="center">
+            <script async type="text/javascript" src="//pl16512345.highcpmrevenuegate.com/a1b2c3d4e5f6g7h8i9j0.js"></script>
+        </div>
+        <button class="back-button" onclick="closeVideo()">Back</button>
     </div>
 
     <script>
@@ -134,36 +94,37 @@
                 const movieElement = document.createElement('div');
                 movieElement.classList.add('movie');
                 movieElement.innerHTML = `
-                    <h3 onclick="openModal('${movie.driveId}')">${movie.title}</h3>
+                    <h3 onclick="openVideo('${movie.driveId}')">${movie.title}</h3>
                 `;
                 moviesContainer.appendChild(movieElement);
             });
         }
 
-        function openModal(driveId) {
+        function openVideo(driveId) {
             let videoUrl = `https://cdn.videy.co/${driveId}.mp4`;
             history.pushState({ video: driveId }, "", `?video=${driveId}`);
+            
+            document.getElementById('movies-container').style.display = 'none';
+            document.getElementById('video-container').style.display = 'block';
             
             let videoFrame = document.getElementById('video-frame');
             videoFrame.src = videoUrl;
             videoFrame.setAttribute("allow", "autoplay");
-
-            document.getElementById('video-modal').style.display = 'flex';
         }
 
-        function closeModal() {
+        function closeVideo() {
             let videoFrame = document.getElementById('video-frame');
-            videoFrame.src = ""; // Stop video
-            document.getElementById('video-modal').style.display = 'none';
+            videoFrame.src = "";
+            document.getElementById('movies-container').style.display = 'grid';
+            document.getElementById('video-container').style.display = 'none';
             history.pushState({}, "", window.location.pathname);
         }
 
         window.onload = function () {
             const urlParams = new URLSearchParams(window.location.search);
             const videoId = urlParams.get("video");
-
             if (videoId) {
-                openModal(videoId);
+                openVideo(videoId);
             }
         };
 

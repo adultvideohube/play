@@ -40,13 +40,17 @@
             padding: 2rem;
             text-align: center;
             position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .video-frame {
-            width: 60%; /* Mengurangi ukuran lebar video */
-            height: 50vh; /* Mengurangi tinggi video */
-            max-width: 600px; /* Membatasi ukuran maksimum */
-            border-radius: 10px; /* Memberikan efek sudut melengkung */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Menambahkan bayangan */
+            width: 300px;
+            height: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transform: perspective(1000px) rotateX(-10deg);
         }
         .ad-container {
             text-align: center;
@@ -100,7 +104,7 @@
             history.pushState({ video: driveId }, "", `?video=${driveId}`);
             
             document.getElementById('movies-container').style.display = 'none';
-            document.getElementById('video-container').style.display = 'block';
+            document.getElementById('video-container').style.display = 'flex';
             
             let videoFrame = document.getElementById('video-frame');
             videoFrame.src = videoUrl;

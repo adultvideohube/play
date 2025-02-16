@@ -46,32 +46,30 @@
         }
         .video-container {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            width: 100vw;
             height: 100vh;
-            background-color: black;
-            text-align: center;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
+            position: relative;
         }
         .video-frame {
-            width: 100%;
-            height: 90vh;
+            width: 100vw;
+            height: 100vh;
+            border: none;
+        }
+        .ads-container {
+            padding: 1rem;
+            background: white;
+            text-align: center;
         }
         .back-button {
-            margin-top: 10px;
-            padding: 10px 20px;
+            display: block;
+            margin: 1rem auto;
+            padding: 0.8rem 1.5rem;
             font-size: 1rem;
-            background-color: #ff3333;
+            background: #333;
             color: white;
             border: none;
-            border-radius: 5px;
             cursor: pointer;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -80,12 +78,15 @@
         <h1>Video Explorer</h1>
     </header>
     
-    <div align="center">adsterra</div>
+    <div align="center">
+        adsterra
+    </div>
 
     <div class="container" id="movies-container"></div>
     
     <div class="video-container" id="video-container">
         <iframe id="video-frame" class="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
+        <div class="ads-container">
 <style type="text/css">
   .mobileShow {display: none;}
 
@@ -128,6 +129,7 @@
 <script type="text/javascript" src="//listenerhooter.com/fe1d2ae890a7d2443d36d8183f2cf16d/invoke.js"></script></center></div>
 
 <script type='text/javascript' src='//listenerhooter.com/89/e6/fb/89e6fbd2a3294a1f03a5e379c65386cf.js'></script>
+        </div>
         <button class="back-button" onclick="closeVideo()">Back</button>
     </div>
 
@@ -158,7 +160,7 @@
             history.pushState({ video: driveId }, "", `?video=${driveId}`);
             
             document.getElementById('movies-container').style.display = 'none';
-            document.getElementById('video-container').style.display = 'flex';
+            document.getElementById('video-container').style.display = 'block';
             
             let videoFrame = document.getElementById('video-frame');
             videoFrame.src = videoUrl;

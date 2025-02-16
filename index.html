@@ -94,13 +94,25 @@
 </head>
 <body>
     <header>
-        <h1>Video Explorer</h1>
+        <h1>viral Video Explorer</h1>
     </header>
+    
+    <!-- Adsterra Banner -->
+    <div align="center">
+        <script async type="text/javascript" src="//pl16512345.highcpmrevenuegate.com/a1b2c3d4e5f6g7h8i9j0.js"></script>
+    </div>
+
     <div class="container" id="movies-container"></div>
 
     <div class="modal" id="video-modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal()">&times;</span>
+            
+            <!-- Adsterra Banner in Modal -->
+            <div align="center">
+                <script async type="text/javascript" src="//pl16512345.highcpmrevenuegate.com/a1b2c3d4e5f6g7h8i9j0.js"></script>
+            </div>
+            
             <iframe id="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
             <button class="back-button" onclick="closeModal()">Back</button>
         </div>
@@ -130,10 +142,8 @@
 
         function openModal(driveId) {
             let videoUrl = `https://cdn.videy.co/${driveId}.mp4`;
-
-            // Perbarui URL di bilah alamat
             history.pushState({ video: driveId }, "", `?video=${driveId}`);
-
+            
             let videoFrame = document.getElementById('video-frame');
             videoFrame.src = videoUrl;
             videoFrame.setAttribute("allow", "autoplay");
@@ -143,10 +153,8 @@
 
         function closeModal() {
             let videoFrame = document.getElementById('video-frame');
-            videoFrame.src = ""; // Hentikan video
+            videoFrame.src = ""; // Stop video
             document.getElementById('video-modal').style.display = 'none';
-
-            // Kembalikan URL ke halaman utama
             history.pushState({}, "", window.location.pathname);
         }
 

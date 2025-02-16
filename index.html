@@ -46,22 +46,32 @@
         }
         .video-container {
             display: none;
-            padding: 0;
-            text-align: center;
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
+            height: 100vh;
+            background-color: black;
+            text-align: center;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
         .video-frame {
             width: 100%;
-            height: 100vh; /* Fullscreen height */
+            height: 90vh;
         }
-        .ad-container {
-            margin-top: 20px;
-            padding: 10px;
-            background-color: #f1f1f1;
-        }
-        .ad-container iframe {
-            width: 100%;
-            height: 100px; /* Example ad size */
+        .back-button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #ff3333;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -70,11 +80,12 @@
         <h1>Video Explorer</h1>
     </header>
     
+    <div align="center">adsterra</div>
+
     <div class="container" id="movies-container"></div>
     
     <div class="video-container" id="video-container">
         <iframe id="video-frame" class="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
-        <div class="ad-container">
 <style type="text/css">
   .mobileShow {display: none;}
 
@@ -117,7 +128,6 @@
 <script type="text/javascript" src="//listenerhooter.com/fe1d2ae890a7d2443d36d8183f2cf16d/invoke.js"></script></center></div>
 
 <script type='text/javascript' src='//listenerhooter.com/89/e6/fb/89e6fbd2a3294a1f03a5e379c65386cf.js'></script>
-        </div>
         <button class="back-button" onclick="closeVideo()">Back</button>
     </div>
 
@@ -148,7 +158,7 @@
             history.pushState({ video: driveId }, "", `?video=${driveId}`);
             
             document.getElementById('movies-container').style.display = 'none';
-            document.getElementById('video-container').style.display = 'block';
+            document.getElementById('video-container').style.display = 'flex';
             
             let videoFrame = document.getElementById('video-frame');
             videoFrame.src = videoUrl;

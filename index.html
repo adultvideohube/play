@@ -57,7 +57,7 @@
         }
         .video-frame {
             width: 100vw;
-            height: 85vh;
+            height: 100vh;
             border: none;
         }
         .ad-container {
@@ -78,18 +78,25 @@
             cursor: pointer;
             font-size: 16px;
         }
+        @media screen and (orientation: landscape) {
+            .video-frame {
+                height: 100vh;
+            }
+        }
     </style>
 </head>
 <body>
     <header>
-        <h1>Video Explorereeees</h1>
+        <h1>Video Explorer</h1>
     </header>
     
     <div class="container" id="movies-container"></div>
     
     <div class="video-container" id="video-container">
         <iframe id="video-frame" class="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
-        <style type="text/css">
+        
+        <div class="ad-container">
+<style type="text/css">
   .mobileShow {display: none;}
 
   /* Smartphone Portrait and Landscape */
@@ -131,6 +138,8 @@
 <script type="text/javascript" src="//listenerhooter.com/fe1d2ae890a7d2443d36d8183f2cf16d/invoke.js"></script></center></div>
 
 <script type='text/javascript' src='//listenerhooter.com/89/e6/fb/89e6fbd2a3294a1f03a5e379c65386cf.js'></script>
+        </div>
+        
         <button class="back-button" onclick="closeVideo()">Back</button>
     </div>
 

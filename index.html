@@ -3,166 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Explorer</title>
-
-    <!-- Script Anti CTRL+U, Klik Kanan, dan F12 -->
-    <script>
-        document.addEventListener("contextmenu", (e) => e.preventDefault());
-        document.addEventListener("keydown", (event) => {
-            if (event.ctrlKey && (event.key === "u" || event.key === "U" || event.key === "s" || event.key === "S" || event.key === "i" || event.key === "I")) {
-                event.preventDefault();
-                alert("Akses ini dilarang!");
-            }
-            if (event.key === "F12") {
-                event.preventDefault();
-                alert("Akses ini dilarang!");
-            }
-        });
-    </script>
-
+    <title>Video Player</title>
     <style>
         body {
+            margin: 0;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f4;
-            text-align: center;
-        }
-        header {
-            background-color: #333;
+            background-color: #000;
             color: white;
-            padding: 1rem;
-            font-size: 1.5rem;
-        }
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            padding: 2rem;
-        }
-        .movie {
-            background: white;
-            padding: 1rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            width: 200px;
             text-align: center;
         }
-        .movie h3 {
-            font-size: 1rem;
-            margin: 0;
-        }
-        .ads-container {
-            margin: 20px auto;
-            text-align: center;
-        }
-        .video-player {
+        .video-container {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: black;
-            display: none;
-            align-items: center;
             justify-content: center;
+            align-items: center;
         }
-        .video-player video {
+        video {
             width: 100%;
-            height: 100%;
-            object-fit: contain;
+            height: 100vh;
         }
         .close-btn {
             position: absolute;
             top: 10px;
-            right: 10px;
-            background: red;
-            color: white;
-            border: none;
-            padding: 10px;
+            right: 20px;
+            font-size: 24px;
             cursor: pointer;
-            font-size: 18px;
+        }
+        .ad-container {
+            margin: 20px 0;
         }
     </style>
-</head>
-<body>
-
-    <header>Video Explorer</header>
-
-    <!-- Iklan Adsterra di halaman awal -->
-    <div class="ads-container">
-        <script async type="text/javascript" src="//www.adsterra.com/script.js"></script>
-    </div>
-
-    <div class="container" id="movies-container"></div>
-
-    <!-- Pemutar Video Full Screen -->
-    <div class="video-player" id="video-modal">
-        <button class="close-btn" onclick="closeVideo()">X</button>
-        <video id="video-frame" controls autoplay></video>
-        
-        <!-- Iklan Adsterra dalam mode pemutaran video -->
-        <div class="ads-container">
-            <script async type="text/javascript" src="//www.adsterra.com/script.js"></script>
-        </div>
-    </div>
-
     <script>
-        const movies = [
-            { title: "Movie 1", driveId: "cenAcoL11" },
-            { title: "Movie 2", driveId: "jhB92t7f1" },
-            { title: "Movie 3", driveId: "xyz123abc" },
-            { title: "Movie 4", driveId: "lmn456def" }
-        ];
+        document.addEventListener('keydown', function(event) {
+            if (event.ctrlKey && (event.key === 'u' || event.key === 'U')) {
+                event.preventDefault();
+                alert('View source is disabled!');
+            }
+        });
 
-        function displayMovies() {
-            const moviesContainer = document.getElementById('movies-container');
-            moviesContainer.innerHTML = '';
-
-            movies.forEach(movie => {
-                const movieElement = document.createElement('div');
-                movieElement.classList.add('movie');
-                movieElement.innerHTML = `<h3 onclick="openVideo('${movie.driveId}')">${movie.title}</h3>`;
-                moviesContainer.appendChild(movieElement);
-            });
-        }
-
-        function openVideo(driveId) {
-            let videoUrl = `https://cdn.videy.co/${driveId}.mp4`;
-
-            // Perbarui URL di bilah alamat
-            history.pushState({ video: driveId }, "", `?video=${driveId}`);
-
-            let videoFrame = document.getElementById('video-frame');
-            videoFrame.src = videoUrl;
-            videoFrame.setAttribute("allow", "autoplay");
-
-            document.getElementById('video-modal').style.display = 'flex';
+        function openVideo(videoId) {
+            window.history.pushState({}, '', '/play/' + videoId);
+            document.getElementById('video-player').src = `https://cdn.videy.co/${videoId}.mp4`;
+            document.getElementById('video-container').style.display = 'flex';
         }
 
         function closeVideo() {
-            let videoFrame = document.getElementById('video-frame');
-            videoFrame.pause();
-            videoFrame.src = ""; 
-            document.getElementById('video-modal').style.display = 'none';
-
-            // Kembalikan URL ke halaman utama
-            history.pushState({}, "", window.location.pathname);
+            window.history.pushState({}, '', '/');
+            document.getElementById('video-container').style.display = 'none';
+            document.getElementById('video-player').pause();
         }
-
-        window.onload = function () {
-            const urlParams = new URLSearchParams(window.location.search);
-            const videoId = urlParams.get("video");
-
-            if (videoId) {
-                openVideo(videoId);
-            }
-        };
-
-        displayMovies();
     </script>
+</head>
+<body>
+    <h1>Welcome to Video Explorer</h1>
+    <div class="ad-container">
+<style type="text/css">
+  .mobileShow {display: none;}
 
+  /* Smartphone Portrait and Landscape */
+  @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px){ 
+      .mobileShow {display: inline;}
+  }
+  .mobileHide { display: inline; }
+
+  /* Smartphone Portrait and Landscape */
+  @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px){
+     .mobileHide { display: none;}
+  }
+</style>
+
+     <div class="mobileShow">
+<center><script type="text/javascript">
+	atOptions = {
+		'key' : '4bba2802ecf8c3ea186ac5104cf76664',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//listenerhooter.com/4bba2802ecf8c3ea186ac5104cf76664/invoke.js"></script></center></div>
+<div class="mobileHide"><center><script type="text/javascript">
+	atOptions = {
+		'key' : 'fe1d2ae890a7d2443d36d8183f2cf16d',
+		'format' : 'iframe',
+		'height' : 90,
+		'width' : 728,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//listenerhooter.com/fe1d2ae890a7d2443d36d8183f2cf16d/invoke.js"></script></center></div>
+
+<script type='text/javascript' src='//listenerhooter.com/89/e6/fb/89e6fbd2a3294a1f03a5e379c65386cf.js'></script>
+
+<script async="async" data-cfasync="false" src="//listenerhooter.com/987439089489ac6a881638cc5912147a/invoke.js"></script>
+<div id="container-987439089489ac6a881638cc5912147a"></div>
+        
+    </div>
+    <button onclick="openVideo('cenAcoL11')">Play Movie</button>
+
+    <div id="video-container" class="video-container">
+        <span class="close-btn" onclick="closeVideo()">&times;</span>
+        <video id="video-player" controls autoplay></video>
+        <div class="ad-container">
+<style type="text/css">
+  .mobileShow {display: none;}
+
+  /* Smartphone Portrait and Landscape */
+  @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px){ 
+      .mobileShow {display: inline;}
+  }
+  .mobileHide { display: inline; }
+
+  /* Smartphone Portrait and Landscape */
+  @media only screen
+    and (min-device-width : 320px)
+    and (max-device-width : 480px){
+     .mobileHide { display: none;}
+  }
+</style>
+
+     <div class="mobileShow">
+<center><script type="text/javascript">
+	atOptions = {
+		'key' : '4bba2802ecf8c3ea186ac5104cf76664',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//listenerhooter.com/4bba2802ecf8c3ea186ac5104cf76664/invoke.js"></script></center></div>
+<div class="mobileHide"><center><script type="text/javascript">
+	atOptions = {
+		'key' : 'fe1d2ae890a7d2443d36d8183f2cf16d',
+		'format' : 'iframe',
+		'height' : 90,
+		'width' : 728,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//listenerhooter.com/fe1d2ae890a7d2443d36d8183f2cf16d/invoke.js"></script></center></div>
+
+        </div>
+    </div>
 </body>
 </html>

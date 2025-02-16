@@ -57,7 +57,7 @@
         }
         .video-frame {
             width: 100vw;
-            height: 100vh;
+            height: 85vh;
             border: none;
         }
         .ad-container {
@@ -68,15 +68,22 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: absolute;
+            bottom: 10vh;
+            left: 0;
         }
         .back-button {
             display: block;
-            margin: 10px auto;
+            margin: auto;
             padding: 10px 20px;
             background-color: white;
             border: none;
             cursor: pointer;
             font-size: 16px;
+            position: absolute;
+            bottom: 2vh;
+            left: 50%;
+            transform: translateX(-50%);
         }
         @media screen and (orientation: landscape) {
             .video-frame {
@@ -87,7 +94,7 @@
 </head>
 <body>
     <header>
-        <h1>Video Explorers</h1>
+        <h1>Video Explorer</h1>
     </header>
     
     <div class="container" id="movies-container"></div>
@@ -96,7 +103,6 @@
         <iframe id="video-frame" class="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
         
         <div class="ad-container">
-            <!-- Kode iklan Adsterra di bawah video -->
 <style type="text/css">
   .mobileShow {display: none;}
 

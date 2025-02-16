@@ -3,64 +3,118 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Player</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background-color: #000;
-            color: white;
-            text-align: center;
-        }
-        .video-container {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: black;
-            justify-content: center;
-            align-items: center;
-        }
-        video {
-            width: 100%;
-            height: 100vh;
-        }
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-        .ad-container {
-            margin: 20px 0;
-        }
-    </style>
-    <script>
+    <title>Where To Watch Popular Video</title>
+    <script type="text/javascript">
         document.addEventListener('keydown', function(event) {
             if (event.ctrlKey && (event.key === 'u' || event.key === 'U')) {
                 event.preventDefault();
                 alert('View source is disabled!');
             }
         });
-
-        function openVideo(videoId) {
-            window.history.pushState({}, '', '/play/' + videoId);
-            document.getElementById('video-player').src = `https://cdn.videy.co/${videoId}.mp4`;
-            document.getElementById('video-container').style.display = 'flex';
-        }
-
-        function closeVideo() {
-            window.history.pushState({}, '', '/');
-            document.getElementById('video-container').style.display = 'none';
-            document.getElementById('video-player').pause();
-        }
     </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+        }
+        .ad-container {
+            text-align: center;
+            margin: 1rem 0;
+        }
+        .container {
+            padding: 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        .movie {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            text-align: center;
+            cursor: pointer;
+        }
+        .movie h3 {
+            font-size: 1.2rem;
+            margin: 0.5rem;
+        }
+        .pagination {
+            text-align: center;
+            margin: 2rem 0;
+        }
+        .pagination button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        .pagination button:hover {
+            background-color: #555;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        .modal-content {
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            position: relative;
+            width: 90%;
+            max-width: 480px;
+            max-height: 80vh;
+            height: auto;
+        }
+        .modal iframe {
+            width: 100%;
+            height: 270px;
+        }
+        .modal .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 1.5rem;
+        }
+        .back-button {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+        }
+        .back-button:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to Video Explorer</h1>
+    <header>
+        <h1>Video Explorer</h1>
+    </header>
     <div class="ad-container">
 <style type="text/css">
   .mobileShow {display: none;}
@@ -104,14 +158,20 @@
 <script type="text/javascript" src="//listenerhooter.com/fe1d2ae890a7d2443d36d8183f2cf16d/invoke.js"></script></center></div>
 
 <script type='text/javascript' src='//listenerhooter.com/89/e6/fb/89e6fbd2a3294a1f03a5e379c65386cf.js'></script>
-	    
-    </div>
-    <button onclick="openVideo('cenAcoL11')">Play Movie</button>
 
-    <div id="video-container" class="video-container">
-        <span class="close-btn" onclick="closeVideo()">&times;</span>
-        <video id="video-player" controls autoplay></video>
-        <div class="ad-container">
+<script async="async" data-cfasync="false" src="//listenerhooter.com/987439089489ac6a881638cc5912147a/invoke.js"></script>
+<div id="container-987439089489ac6a881638cc5912147a"></div>
+
+    </div>
+    <div class="container" id="movies-container"></div>
+    <div class="pagination">
+        <button onclick="previousPage()" id="prev-btn" disabled>Previous</button>
+        <button onclick="nextPage()" id="next-btn">Next</button>
+    </div>
+    <div class="modal" id="video-modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <div class="ad-container">
 <style type="text/css">
   .mobileShow {display: none;}
 
@@ -153,7 +213,84 @@
 </script>
 <script type="text/javascript" src="//listenerhooter.com/fe1d2ae890a7d2443d36d8183f2cf16d/invoke.js"></script></center></div>
 
+<script type='text/javascript' src='//listenerhooter.com/89/e6/fb/89e6fbd2a3294a1f03a5e379c65386cf.js'></script>
+
+<script async="async" data-cfasync="false" src="//listenerhooter.com/987439089489ac6a881638cc5912147a/invoke.js"></script>
+<div id="container-987439089489ac6a881638cc5912147a"></div>
+
+            </div>
+            <iframe id="video-frame" allow="autoplay" frameborder="0" allowfullscreen></iframe>
+            <button class="back-button" onclick="closeModal()">back</button>
         </div>
     </div>
+    <script>
+        const movies = [
+            { title: "Movie 17", driveId: "cenAcoL11" },
+            { title: "Movie 18", driveId: "jhB92t7f1" },
+            { title: "Movie 19", driveId: "YOUR_DRIVE_FILE_ID_19" },
+            { title: "Movie 20", driveId: "YOUR_DRIVE_FILE_ID_20" }
+        ];
+
+        let currentPage = 1;
+        const itemsPerPage = 16;
+
+        function displayMovies() {
+            const moviesContainer = document.getElementById('movies-container');
+            moviesContainer.innerHTML = '';
+            
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const paginatedMovies = movies.slice(startIndex, startIndex + itemsPerPage);
+
+            paginatedMovies.forEach(movie => {
+                const movieElement = document.createElement('div');
+                movieElement.classList.add('movie');
+                movieElement.innerHTML = `
+                    <h3 onclick="openModal('${movie.driveId}')">${movie.title}</h3>
+                `;
+                moviesContainer.appendChild(movieElement);
+            });
+
+            document.getElementById('prev-btn').disabled = currentPage === 1;
+            document.getElementById('next-btn').disabled = currentPage * itemsPerPage >= movies.length;
+        }
+
+        function openModal(driveId) {
+            document.getElementById('video-frame').src = `https://cdn.videy.co/${driveId}.mp4`;
+            document.getElementById('video-modal').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('video-modal').style.display = 'none';
+            document.getElementById('video-frame').src = '';
+        }
+
+        function nextPage() {
+            if (currentPage * itemsPerPage < movies.length) {
+                currentPage++;
+                displayMovies();
+            }
+        }
+
+        function previousPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                displayMovies();
+            }
+        }
+
+        displayMovies();
+    </script>
 </body>
+<!-- Histats.com  START  (aync)-->
+<script type="text/javascript">var _Hasync= _Hasync|| [];
+_Hasync.push(['Histats.start', '1,4922497,4,0,0,0,00000000']);
+_Hasync.push(['Histats.fasi', '1']);
+_Hasync.push(['Histats.track_hits', '']);
+(function() {
+var hs = document.createElement('script'); hs.type = 'text/javascript'; hs.async = true;
+hs.src = ('//s10.histats.com/js15_as.js');
+(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(hs);
+})();</script>
+<noscript><a href="/" target="_blank"><img  src="//sstatic1.histats.com/0.gif?4922497&101" alt="" border="0"></a></noscript>
+<!-- Histats.com  END  -->
 </html>
